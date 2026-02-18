@@ -1,0 +1,18 @@
+WordPress Deployment: customer-name
+Created: Wed 18 Feb 2026 17:19:20 AEST
+
+App Details:
+App ID: 
+App Name: wordpress-customer-name
+URL: 
+Region: nyc
+
+Database:
+DB_NAME: customer_name
+DB_USER: customer_name_user
+TABLE_PREFIX: customer_n_
+
+Next Steps:
+1. Wait for deployment to complete (3-5 minutes)
+2. Visit: 
+3. Complete WordPress installation

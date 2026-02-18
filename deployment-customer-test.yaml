@@ -1,4 +1,4 @@
-name: wordpress-template
+name: wordpress-customer-test
 region: nyc
 
 services:
@@ -12,28 +12,34 @@ services:
     environment_slug: php
     envs:
       - key: DB_NAME
+        value: customer_name
         scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: DB_USER
+        value: customer_name_user
         scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: DB_PASSWORD
+        value: Np2aCQWHdvL2wVwM97Jm0zEV5AykTXUi
         scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: DB_HOST
+        value: wordpress-mysql-cluster-do-user-28531160-0.i.db.ondigitalocean.com
         scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: DB_PORT
+        value: "25060"
         scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: TABLE_PREFIX
+        value: customer_n_
         scope: RUN_AND_BUILD_TIME
     health_check:
-      http_path: /health.php
+      http_path: /
       port: 8080
-      initial_delay_seconds: 60
+      initial_delay_seconds: 90
       period_seconds: 10
-      timeout_seconds: 3
+      timeout_seconds: 5
       success_threshold: 1
       failure_threshold: 3
     http_port: 8080
