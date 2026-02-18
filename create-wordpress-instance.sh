@@ -77,7 +77,7 @@ echo "$SQL_COMMANDS" | mysql \
     -P "$DB_PORT" \
     -u doadmin \
     "-p$MYSQL_ROOT_PW" \
-    --ssl-mode=REQUIRED \
+    --ssl \
     2>&1 | grep -v "mysql: [Warning]"
 
 if [ $? -eq 0 ]; then
