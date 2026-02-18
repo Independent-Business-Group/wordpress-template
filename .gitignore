@@ -1,0 +1,8 @@
+wp-config.php
+.env.generated
+.initialized
+credentials-*.txt
+vendor/
+node_modules/
+*.log
+.DS_Store
