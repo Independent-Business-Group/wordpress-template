@@ -1,8 +1,8 @@
 WordPress Deployment: customer-name
-Created: Wed 18 Feb 2026 17:19:20 AEST
+Created: Wed 18 Feb 2026 17:31:10 AEST
 
 App Details:
-App ID: 
+App ID: 21567efa-41ef-4ab5-9947-bcf0d1b906c8
 App Name: wordpress-customer-name
 URL: 
 Region: nyc
