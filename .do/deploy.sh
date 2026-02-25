@@ -86,6 +86,9 @@ define('DB_HOST', getenv('DB_HOST') . ':' . (getenv('DB_PORT') ?: '3306'));
 define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATE', '');
 
+// MySQL SSL Configuration for DigitalOcean Managed Database
+define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
+
 // Table Prefix
 $table_prefix = getenv('TABLE_PREFIX') ?: 'wp_';
 
