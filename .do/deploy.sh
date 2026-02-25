@@ -86,13 +86,6 @@ define('DB_HOST', getenv('DB_HOST') . ':' . (getenv('DB_PORT') ?: '3306'));
 define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATE', '');
 
-// WordPress URLs - Override database values with custom domain
-// This ensures cookies and redirects work correctly behind App Platform proxy
-if (getenv('WP_HOME')) {
-    define('WP_HOME', getenv('WP_HOME'));
-    define('WP_SITEURL', getenv('WP_HOME'));
-}
-
 // Table Prefix
 $table_prefix = getenv('TABLE_PREFIX') ?: 'wp_';
 
