@@ -27,32 +27,42 @@ use_https = True
 signature_v2 = False
 EOF
     
-    # Install s3cmd if not present
+    # Install s3cmd using apt (available in PHP buildpack Ubuntu environment)
     if ! command -v s3cmd &> /dev/null; then
-        pip install s3cmd
+        apt-get update -qq && apt-get install -y -qq s3cmd > /dev/null 2>&1 || {
+            echo "⚠ Failed to install s3cmd via apt, trying pip3..."
+            python3 -m pip install --quiet s3cmd 2>/dev/null || {
+                echo "✗ Could not install s3cmd, skipping Spaces download"
+                export SPACES_DOWNLOAD_FAILED=1
+            }
+        }
     fi
     
     # Download wp-content from Spaces
-    # Remove default wp-content that came with WordPress core
-    rm -rf wp-content/*
-    
-    # Sync from Spaces
-    s3cmd -c /tmp/.s3cfg sync \
-        s3://${SPACES_BUCKET}/${SPACES_FOLDER}/wp-content/ \
-        wp-content/ \
-        --skip-existing \
-        --no-preserve
-    
-    echo "✓ wp-content downloaded from Spaces ($(du -sh wp-content | cut -f1))"
-    
-    # Create mu-plugins directory if it doesn't exist
-    mkdir -p wp-content/mu-plugins
-    
-    # Copy sync script to root
-    cp sync-to-spaces.php . || echo "⚠ sync-to-spaces.php not found in repo"
-    chmod +x sync-to-spaces.php || true
-    
-    echo "✓ Spaces sync configured"
+    if [ "$SPACES_DOWNLOAD_FAILED" != "1" ]; then
+        # Remove default wp-content that came with WordPress core
+        rm -rf wp-content/*
+        
+        # Sync from Spaces
+        s3cmd -c /tmp/.s3cfg sync \
+            s3://${SPACES_BUCKET}/${SPACES_FOLDER}/wp-content/ \
+            wp-content/ \
+            --skip-existing \
+            --no-preserve
+        
+        echo "✓ wp-content downloaded from Spaces ($(du -sh wp-content | cut -f1))"
+        
+        # Create mu-plugins directory if it doesn't exist
+        mkdir -p wp-content/mu-plugins
+        
+        # Copy sync script to root
+        cp sync-to-spaces.php . || echo "⚠ sync-to-spaces.php not found in repo"
+        chmod +x sync-to-spaces.php || true
+        
+        echo "✓ Spaces sync configured"
+    else
+        echo "⚠ s3cmd installation failed, using default wp-content from repo"
+    fi
 else
     echo "⚠ SPACES_* environment variables not set, using default wp-content"
 fi
