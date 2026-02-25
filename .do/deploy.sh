@@ -12,6 +12,51 @@ tar -xzf wordpress-latest.tar.gz --strip-components=1
 rm wordpress-latest.tar.gz
 echo "✓ WordPress core downloaded"
 
+# Download wp-content from DO Spaces
+if [ -n "$SPACES_BUCKET" ] && [ -n "$SPACES_FOLDER" ]; then
+    echo "→ Downloading wp-content from Spaces..."
+    
+    # Configure s3cmd
+    cat > /tmp/.s3cfg << EOF
+[default]
+access_key = ${SPACES_KEY}
+secret_key = ${SPACES_SECRET}
+host_base = syd1.digitaloceanspaces.com
+host_bucket = %(bucket)s.syd1.digitaloceanspaces.com
+use_https = True
+signature_v2 = False
+EOF
+    
+    # Install s3cmd if not present
+    if ! command -v s3cmd &> /dev/null; then
+        pip install s3cmd
+    fi
+    
+    # Download wp-content from Spaces
+    # Remove default wp-content that came with WordPress core
+    rm -rf wp-content/*
+    
+    # Sync from Spaces
+    s3cmd -c /tmp/.s3cfg sync \
+        s3://${SPACES_BUCKET}/${SPACES_FOLDER}/wp-content/ \
+        wp-content/ \
+        --skip-existing \
+        --no-preserve
+    
+    echo "✓ wp-content downloaded from Spaces ($(du -sh wp-content | cut -f1))"
+    
+    # Create mu-plugins directory if it doesn't exist
+    mkdir -p wp-content/mu-plugins
+    
+    # Copy sync script to root
+    cp sync-to-spaces.php . || echo "⚠ sync-to-spaces.php not found in repo"
+    chmod +x sync-to-spaces.php || true
+    
+    echo "✓ Spaces sync configured"
+else
+    echo "⚠ SPACES_* environment variables not set, using default wp-content"
+fi
+
 # Generate wp-config.php template
 # This uses getenv() so it reads environment variables at runtime
 echo "→ Generating wp-config.php template..."
