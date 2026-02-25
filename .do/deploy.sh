@@ -27,14 +27,15 @@ use_https = True
 signature_v2 = False
 EOF
     
-    # Install s3cmd using apt (available in PHP buildpack Ubuntu environment)
+    # Install s3cmd using pip3 with --user flag (no root needed)
     if ! command -v s3cmd &> /dev/null; then
-        apt-get update -qq && apt-get install -y -qq s3cmd > /dev/null 2>&1 || {
-            echo "⚠ Failed to install s3cmd via apt, trying pip3..."
-            python3 -m pip install --quiet s3cmd 2>/dev/null || {
-                echo "✗ Could not install s3cmd, skipping Spaces download"
-                export SPACES_DOWNLOAD_FAILED=1
-            }
+        echo "→ Installing s3cmd..."
+        python3 -m pip install --user --quiet s3cmd 2>/dev/null && {
+            export PATH="$HOME/.local/bin:$PATH"
+            echo "✓ s3cmd installed"
+        } || {
+            echo "✗ Could not install s3cmd, skipping Spaces download"
+            export SPACES_DOWNLOAD_FAILED=1
         }
     fi
     
