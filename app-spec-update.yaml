@@ -1,0 +1,55 @@
+ingress:
+  rules:
+  - component:
+      name: web
+    match:
+      path:
+        prefix: /
+name: wordpress-preciseitservices
+region: syd
+services:
+- environment_slug: php
+  envs:
+  - key: DB_NAME
+    scope: RUN_AND_BUILD_TIME
+    value: wp_preciseitservices
+  - key: DB_USER
+    scope: RUN_AND_BUILD_TIME
+    value: dablackfox
+  - key: DB_PASSWORD
+    scope: RUN_AND_BUILD_TIME
+    value: lrV1tXYA/uZRT9IKbSXJTL/UcTborCpccvyBUhPcrrE=
+  - key: DB_HOST
+    scope: RUN_AND_BUILD_TIME
+    value: wordpress-mysql-cluster-do-user-28531160-0.i.db.ondigitalocean.com
+  - key: DB_PORT
+    scope: RUN_AND_BUILD_TIME
+    value: "25060"
+  - key: TABLE_PREFIX
+    scope: RUN_AND_BUILD_TIME
+    value: mjD6nT_
+  - key: SPACES_BUCKET
+    scope: RUN_AND_BUILD_TIME
+    value: everydaytech-wordpress
+  - key: SPACES_FOLDER
+    scope: RUN_AND_BUILD_TIME
+    value: preciseitservices
+  - key: SPACES_KEY
+    scope: RUN_AND_BUILD_TIME
+    value: DO003JUHBJDDCCF9D6MU
+  - key: SPACES_SECRET
+    scope: RUN_AND_BUILD_TIME
+    value: GfESp4P+QbqkZ5bkm/BOrw6MAjtmLN7Wb7X9UrJwtuU
+  - key: SPACES_REGION
+    scope: RUN_AND_BUILD_TIME
+    value: syd1
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: Independent-Business-Group/wordpress-template
+  build_command: chmod +x .do/deploy.sh && .do/deploy.sh
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: apps-s-1vcpu-0.5gb
+  name: web
+  source_dir: /
